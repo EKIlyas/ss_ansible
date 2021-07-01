@@ -1,0 +1,24 @@
+- name: Configure application
+  hosts: all
+  become: true
+  become_method: sudo
+  vars:
+      repository_url: https://github.com/anfederico/flaskex.git
+      repository_path: /home/vagrant/flaskex
+
+  tasks:
+    - name: installing git
+      apt:
+        name: git
+        update_cache: yes
+
+    - name: installing pip
+      apt:
+        name: python-pip
+        update_cache: yes
+
+    - name: Clone repository
+      git: repo='{{ repository_url }}' dest='{{ repository_path }}'
+
+    - name: Install requirements
+      shell: pip install -r '{{ repository_path }}/requirements.txt'
